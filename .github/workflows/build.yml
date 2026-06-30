@@ -11,13 +11,12 @@ jobs:
           unzip pk-earn-pro.zip -d project
           find project -name gradlew -exec chmod +x {} \;
           find project -name gradlew -exec {} assembleDebug \;
-          
-      - name: List APK files
-        run: find . -name "*.apk"
+          # Saari APKs ko root folder mein copy karein
+          find project -name "*.apk" -exec cp {} . \;
           
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
-          path: project/**/outputs/apk/debug/*.apk
+          path: "*.apk"
           
