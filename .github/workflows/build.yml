@@ -14,10 +14,9 @@ jobs:
       - name: Unzip and Build
         run: |
           unzip pk-earn-pro.zip -d project
-          cd project
-          # Ye line gradlew ko dhoond kar execute karegi
-          find . -name gradlew -exec chmod +x {} \;
-          ./gradlew assembleDebug
+          # gradlew ka exact path dhoond kar run karein
+          find project -name gradlew -exec chmod +x {} \;
+          find project -name gradlew -exec {} assembleDebug \;
           
       - name: Upload APK
         uses: actions/upload-artifact@v4
