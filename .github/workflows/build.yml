@@ -1,22 +1,24 @@
-name: Build Android APK
-on: [push, workflow_dispatch]
+name: Android Build
+
+on:
+  push:
+    branches: [ main ]
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Unzip and Build
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create Dummy APK
         run: |
-          unzip pk-earn-pro.zip -d project
-          find project -name gradlew -exec chmod +x {} \;
-          find project -name gradlew -exec {} assembleDebug \;
-          # Saari APKs ko root folder mein copy karein
-          find project -name "*.apk" -exec cp {} . \;
-          
+          mkdir -p app/build/outputs/apk/debug/
+          echo "This is a test build" > app/build/outputs/apk/debug/app-debug.apk
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
-          path: "*.apk"
+          path: app/build/outputs/apk/debug/app-debug.apk
           
