@@ -1,10 +1,5 @@
 name: Build Android APK
-
-on:
-  push:
-    branches: [ main, master ]
-  workflow_dispatch:
-
+on: [push, workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,13 +9,15 @@ jobs:
       - name: Unzip and Build
         run: |
           unzip pk-earn-pro.zip -d project
-          # gradlew ka exact path dhoond kar run karein
           find project -name gradlew -exec chmod +x {} \;
           find project -name gradlew -exec {} assembleDebug \;
+          
+      - name: List APK files
+        run: find . -name "*.apk"
           
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
-          path: project/**/app/build/outputs/apk/debug/app-debug.apk
+          path: project/**/outputs/apk/debug/*.apk
           
