@@ -16,6 +16,7 @@ jobs:
     - name: Unzip Project Files
       run: |
         unzip -o pk-earn-pro.zip -d extracted_project
+        find . -name gradlew # Ye command gradlew ka sahi rasta dhoond legi
 
     - name: Set up JDK 17
       uses: actions/setup-java@v4
@@ -23,18 +24,16 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3
-
     - name: Build Debug APK
       run: |
-        cd extracted_project
-        chmod +x gradlew
-        ./gradlew assembleDebug
+        # Ye line khud gradlew ka path dhoond kar build shuru kar degi
+        GRADLEW_PATH=$(find . -name gradlew)
+        chmod +x $GRADLEW_PATH
+        $GRADLEW_PATH assembleDebug
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
-        path: extracted_project/app/build/outputs/apk/debug/app-debug.apk
+        path: **/app/build/outputs/apk/debug/app-debug.apk
         
